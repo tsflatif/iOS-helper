@@ -18,3 +18,22 @@ extension UITextField {
         self.layer.masksToBounds = true
     }
 }
+
+extension UIViewController {
+    // Quick Alert Message
+    func customAlertMsg(title: String, message: String){
+        let alertVC = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert)
+        let okAction = UIAlertAction(
+            title: "OK",
+            style:.default,
+            handler: nil)
+        alertVC.addAction(okAction)
+        present(
+            alertVC,
+            animated: true,
+            completion: nil)
+    }
+}
