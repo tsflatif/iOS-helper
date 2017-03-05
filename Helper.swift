@@ -37,3 +37,75 @@ extension UIViewController {
             completion: nil)
     }
 }
+
+extension String {
+    
+    // To check text field or String is blank or not
+    var isBlank: Bool {
+        get {
+            let trimmed = trimmingCharacters(in: CharacterSet.whitespaces)
+            return trimmed.isEmpty
+        }
+    }
+    
+    // Validate Email
+    var isEmail: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", options: .caseInsensitive)
+            return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil
+        } catch {
+            return false
+        }
+    }
+    
+    // Validate URL
+    var isWebURL: Bool {
+        // TODO: Try better/safer logic. now it works if there is "<something>.<something>" anywhere in the text
+        do {
+            let regex = try NSRegularExpression(pattern: "((https://|http://|^))((\\w|-)+)(([.]|[/])((\\w|-)+))+", options: .caseInsensitive)
+            return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil
+        } catch {
+            return false
+        }
+    }
+    
+    // Is string Alphanumeric
+    var isAlphanumeric: Bool {
+        return !isEmpty && range(of: "[^a-zA-Z0-9]", options: .regularExpression) == nil
+    }
+    
+    // Validate Password
+    var isValidPassword: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "^[a-zA-Z_0-9\\-_,;.:#+*?=!§$%&/()@]+$", options: .caseInsensitive)
+            if(regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil){
+                
+                if(self.characters.count>=6 && self.characters.count<=20){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+                return false
+            }
+        } catch {
+            return false
+        }
+    }
+    
+    // Validate Canadian Postal code
+    var isCanadianPostalCode: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "[A-Z][0-9][A-Z]\\s?[0-9][A-Z][0-9]", options: .caseInsensitive)
+            return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil
+        } catch {
+            return false
+        }
+    }
+    
+    //Remove all white spaces
+    func removingWhitespaces() -> String {
+        return components(separatedBy: .whitespaces).joined()
+    }
+}
+
